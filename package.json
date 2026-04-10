@@ -1,0 +1,26 @@
+{
+  "name": "monitor-web-page-changes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spamowyborek/monitor-web-page-changes.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/spamowyborek/monitor-web-page-changes/issues"
+  },
+  "homepage": "https://github.com/spamowyborek/monitor-web-page-changes#readme",
+  "dependencies": {
+    "pixelmatch": "^7.1.0",
+    "playwright": "^1.59.1",
+    "pngjs": "^7.0.0"
+  }
+}
