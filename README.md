@@ -27,9 +27,13 @@ Add these secrets in GitHub under `Settings -> Secrets and variables -> Actions`
 - `MAIL_TO` - notification recipient address
 - `MAIL_FROM` - notification sender address
 
-## Required repository variable
+## Default monitored URL
 
-Add the `MONITOR_URL` repository variable if you want scheduled runs to use a default URL.
+Scheduled runs now default to this Booking.com search page:
+
+`https://www.booking.com/searchresults.pl.html?ss=Budapeszt%2C+Central+Hungary%2C+W%C4%99gry&efdco=1&lang=pl&src=index&dest_id=-850553&dest_type=city&ac_position=0&ac_click_type=b&ac_langcode=pl&ac_suggestion_list_length=5&search_selected=true&search_pageview_id=f9b951b5edcc06d2&checkin=2026-05-29&checkout=2026-05-31&group_adults=2&no_rooms=1&group_children=2&age=10&age=8&nflt=price%3DPLN-min-800-1%3Breview_score%3D80%3Bfc%3D2%3Bdi%3D2279#map_closed`
+
+If needed, you can still override it with the `MONITOR_URL` repository variable.
 
 ## Manual run
 
