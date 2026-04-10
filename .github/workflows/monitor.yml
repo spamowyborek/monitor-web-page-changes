@@ -1,0 +1,86 @@
+name: Monitor web page changes
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: URL to monitor
+        required: true
+        type: string
+  schedule:
+    - cron: '0 */2 * * *'
+
+env:
+  DEFAULT_URL: ${{ vars.MONITOR_URL }}
+  SCREENSHOT_DELAY_MS: '2000'
+  PIXELMATCH_THRESHOLD: '0.1'
+  MIN_CHANGED_PIXELS: '100'
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Resolve monitored URL
+        id: resolve-url
+        run: |
+          resolved_url="${{ github.event.inputs.url }}"
+
+          if [ -z "$resolved_url" ]; then
+            resolved_url="${DEFAULT_URL}"
+          fi
+
+          if [ -z "$resolved_url" ]; then
+            echo "Missing monitored URL. Set workflow input 'url' or repository variable MONITOR_URL." >&2
+            exit 1
+          fi
+
+          echo "url=$resolved_url" >> "$GITHUB_OUTPUT"
+
+      - name: Run monitor
+        id: monitor
+        env:
+          MONITOR_URL: ${{ steps.resolve-url.outputs.url }}
+        run: npm run monitor -- "${MONITOR_URL}"
+
+      - name: Send change notification email
+        if: steps.monitor.outputs.changed == 'true'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port: ${{ secrets.SMTP_PORT }}
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: Wykryto zmianę na monitorowanej stronie
+          to: ${{ secrets.MAIL_TO }}
+          from: ${{ secrets.MAIL_FROM }}
+          html_body: |
+            <p>Wykryto zmianę na stronie: <a href="${{ steps.resolve-url.outputs.url }}">${{ steps.resolve-url.outputs.url }}</a></p>
+            <p>Liczba różniących się pikseli: ${{ steps.monitor.outputs.changed_pixels }}</p>
+          attachments: diff.png
+
+      - name: Commit updated baseline screenshot
+        if: steps.monitor.outputs.baseline_updated == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'chore: update baseline screenshot'
+          file_pattern: last_screenshot.png
