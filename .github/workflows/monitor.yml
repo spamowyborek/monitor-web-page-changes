@@ -5,7 +5,7 @@ on:
     inputs:
       url:
         description: URL to monitor
-        required: true
+        required: false
         type: string
   # schedule:
   #   - cron: '0 */2 * * *'
@@ -65,21 +65,21 @@ jobs:
           MONITOR_URL: ${{ steps.resolve-url.outputs.url }}
         run: npm run monitor -- "${MONITOR_URL}"
 
-      - name: Send change notification email
-        if: steps.monitor.outputs.changed == 'true'
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: ${{ secrets.SMTP_SERVER }}
-          server_port: ${{ secrets.SMTP_PORT }}
-          username: ${{ secrets.SMTP_USERNAME }}
-          password: ${{ secrets.SMTP_PASSWORD }}
-          subject: Wykryto zmianę na monitorowanej stronie
-          to: ${{ secrets.MAIL_TO }}
-          from: ${{ secrets.MAIL_FROM }}
-          html_body: |
-            <p>Wykryto zmianę na stronie: <a href="${{ steps.resolve-url.outputs.url }}">${{ steps.resolve-url.outputs.url }}</a></p>
-            <p>Liczba różniących się pikseli: ${{ steps.monitor.outputs.changed_pixels }}</p>
-          attachments: diff.png
+      # - name: Send change notification email
+      #   if: steps.monitor.outputs.changed == 'true'
+      #   uses: dawidd6/action-send-mail@v3
+      #   with:
+      #     server_address: ${{ secrets.SMTP_SERVER }}
+      #     server_port: ${{ secrets.SMTP_PORT }}
+      #     username: ${{ secrets.SMTP_USERNAME }}
+      #     password: ${{ secrets.SMTP_PASSWORD }}
+      #     subject: Wykryto zmianę na monitorowanej stronie
+      #     to: boryzo@gmail.com
+      #     from: boryzo@gmail.com
+      #     html_body: |
+      #       <p>Wykryto zmianę na stronie: <a href="${{ steps.resolve-url.outputs.url }}">${{ steps.resolve-url.outputs.url }}</a></p>
+      #       <p>Liczba różniących się pikseli: ${{ steps.monitor.outputs.changed_pixels }}</p>
+      #     attachments: diff.png
 
       - name: Commit updated baseline screenshot
         if: steps.monitor.outputs.baseline_updated == 'true'
