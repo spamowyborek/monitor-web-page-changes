@@ -13,7 +13,7 @@ on:
 env:
   DEFAULT_URL: >-
     ${{ vars.MONITOR_URL ||
-    'https://www.booking.com/searchresults.html?lang=en-us&src=index&dest_id=-850553&dest_type=city&ac_position=0&ac_click_type=b&ac_langcode=pl&ac_suggestion_list_length=5&search_selected=true&search_pageview_id=f9b951b5edcc06d2&checkin=2026-05-29&checkout=2026-05-31&group_adults=2&no_rooms=1&group_children=2&age=10&age=8&nflt=price%3DPLN-min-800-1%3Breview_score%3D80%3Bfc%3D2%3Bdi%3D2279&soz=1&lang_changed=1#map_closed'
+    'https://www.booking.com/searchresults.html?label=gen173nr-10CAEoggI46AdIM1gEaLYBiAEBmAEzuAEXyAEM2AED6AEB-AEBiAIBqAIBuAKf4f3OBsACAdICJGJlNTQ4ODQ5LTUwM2UtNDk5Ny04NGI4LTI0ZTIyNTU0MjhhYtgCAeACAQ&aid=304142&ss=Budapest%2C+Central+Hungary%2C+Hungary&efdco=1&lang=en-us&src=index&dest_id=-850553&dest_type=city&ac_position=0&ac_click_type=b&ac_langcode=xu&ac_suggestion_list_length=5&search_selected=true&search_pageview_id=797d4dcf1a4301bd&checkin=2026-05-29&checkout=2026-05-31&group_adults=2&no_rooms=1&group_children=2&age=9&age=8&nflt=price%3DUSD-min-300-1'
     }}
   SCREENSHOT_DELAY_MS: '2000'
   PIXELMATCH_THRESHOLD: '0.1'
